@@ -1,6 +1,6 @@
 .icone {
-    max-width: 30%;
-    max-width: 60px;
+    max-width: 30% !important;
+    max-width: 60px !important;
     display: block;
     margin: 0 auto;
 }
