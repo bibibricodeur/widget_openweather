@@ -43,7 +43,7 @@ class Widget_OpenWeather extends WP_Widget {
             //echo $patelin;
 			echo $args['before_title'] . 'Météo ' . apply_filters( 'widget_title', $patelin ) . $args['after_title'];
 		//}
-		//echo esc_html__( 'Hello, Widget_Openweather!', 'text_domain' );
+			//echo esc_html__( 'Hello, Widget_Openweather!', 'text_domain' );
             $description= $objetsjson -> weather[0] -> description;
             $humidite   = $objetsjson -> main -> humidity;
             $icone      = $objetsjson -> weather[0] -> icon . '.svg';
@@ -68,8 +68,11 @@ class Widget_OpenWeather extends WP_Widget {
                     echo '<li>Pression: <b>' . $pression . ' hPa</b></li>';
                     echo '<li>Vent: <b>' . $vent . ' m/s</b></li>';
                 echo '</ul>';
-            echo '</div>';
+			echo '</div>';
+		} else {
+			echo $args['before_title'] . 'Météo ' . $args['after_title'];		
 		}
+
 		echo $args['after_widget'];
 	}
 
@@ -80,8 +83,8 @@ class Widget_OpenWeather extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		// affiche le formulaire d'options sur admin
-		$ville = ! empty( $instance['idville'] ) ? $instance['idville'] : esc_html__( 'ID de la ville', 'text_domain' );
-		$cleapi = ! empty( $instance['cleapi'] ) ? $instance['cleapi'] : esc_html__( 'Clé de l\'api', 'text_domain' );		
+		$ville = ! empty( $instance['idville'] ) ? $instance['idville'] : esc_html__( ' ', 'text_domain' );
+		$cleapi = ! empty( $instance['cleapi'] ) ? $instance['cleapi'] : esc_html__( ' ', 'text_domain' );		
 		?>
 		<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'idville' ) ); ?>"><?php esc_attr_e( 'ID de la ville:', 'text_domain' ); ?></label> 
