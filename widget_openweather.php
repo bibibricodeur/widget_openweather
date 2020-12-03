@@ -31,50 +31,59 @@ class Widget_OpenWeather extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
+
 		// affiche le contenu du widget
 		echo $args['before_widget'];
 		//print_r( $instance );
 		if ( ! empty( $instance['idville'] ) && ! empty( $instance['cleapi'] )) {
-		    $requete = ( 'https://api.openweathermap.org/data/2.5/weather?id=' . $instance['idville'] . '&appid=' . $instance['cleapi'] . '&lang=fr&units=metric' );
-            $reponse    = file_get_contents($requete);
-            $objetsjson = json_decode($reponse);
-            //var_dump($objetsjson);
-            $patelin    = $objetsjson -> name;
-            //echo $patelin;
-			echo $args['before_title'] . 'Météo ' . apply_filters( 'widget_title', $patelin ) . $args['after_title'];
-		//}
-			//echo esc_html__( 'Hello, Widget_Openweather!', 'text_domain' );
-            $description= $objetsjson -> weather[0] -> description;
-            $humidite   = $objetsjson -> main -> humidity;
-            $icone      = $objetsjson -> weather[0] -> icon . '.svg';
-            $pression   = $objetsjson -> main -> pressure;
-            $temp       = $objetsjson -> main -> temp;
-            $temp_max   = $objetsjson -> main -> temp_max;
-            $temp_min   = $objetsjson -> main -> temp_min;
-            $vent       = $objetsjson -> wind -> speed;
+			$requete = ( 'https://api.openweathermap.org/data/2.5/weather?id=' . $instance['idville'] . '&appid=' . $instance['cleapi'] . '&lang=fr&units=metric' );
+			$reponse    = file_get_contents($requete);
+			try {
+				$objetsjson = json_decode($reponse);
+				//var_dump($objetsjson);
+				$patelin    = $objetsjson -> name;
+				//echo $patelin;
+				echo $args['before_title'] . 'Météo ' . apply_filters( 'widget_title', $patelin ) . $args['after_title'];
+			//}
+				//echo esc_html__( 'Hello, Widget_Openweather!', 'text_domain' );
+				$description= $objetsjson -> weather[0] -> description;
+				$humidite   = $objetsjson -> main -> humidity;
+				$icone      = $objetsjson -> weather[0] -> icon . '.svg';
+				$pression   = $objetsjson -> main -> pressure;
+				$temp       = $objetsjson -> main -> temp;
+				$temp_max   = $objetsjson -> main -> temp_max;
+				$temp_min   = $objetsjson -> main -> temp_min;
+				$vent       = $objetsjson -> wind -> speed;
 
-
-            //echo ($icone); // OK
-            echo '<img class="icone" src="' . plugin_dir_url(__FILE__) . 'node_modules/open-weather-icons/src/svg/' . $icone . '" />';            
-            echo '<div class="temperature_widget">';
-                echo '<ul class="div_temp" style="list-style: none; padding-left: 1.2em;">';
-                    echo '<li class="temp_min">' . round($temp_min) . ' °C</li>';
-                    echo '<li class="temp"><b>' . round($temp) . ' °C</b></li>';
-                    echo '<li class="temp_max">' . round($temp_max) . ' °C</li>';
-                echo '</ul>';
-                echo '<ul style="list-style: none; padding-left: 1.2em;">';
-                    echo '<li>Description: <b>' . $description . '</b></li>';
-                    echo '<li>Humidité: <b>' . $humidite . ' %</b></li>';                
-                    echo '<li>Pression: <b>' . $pression . ' hPa</b></li>';
-                    echo '<li>Vent: <b>' . $vent . ' m/s</b></li>';
-                echo '</ul>';
-			echo '</div>';
-		} else {
-			echo $args['before_title'] . 'Météo ' . $args['after_title'];		
-		}
+				//echo ($icone); // OK
+				echo '<img class="icone" src="' . plugin_dir_url(__FILE__) . 'node_modules/open-weather-icons/src/svg/' . $icone . '" />';            
+				echo '<div class="temperature_widget">';
+					echo '<ul class="div_temp" style="list-style: none; padding-left: 1.2em;">';
+						echo '<li class="temp_min">' . round($temp_min) . ' °C</li>';
+						echo '<li class="temp"><b>' . round($temp) . ' °C</b></li>';
+						echo '<li class="temp_max">' . round($temp_max) . ' °C</li>';
+					echo '</ul>';
+					echo '<ul style="list-style: none; padding-left: 1.2em;">';
+						echo '<li>Description: <b>' . $description . '</b></li>';
+						echo '<li>Humidité: <b>' . $humidite . ' %</b></li>';                
+						echo '<li>Pression: <b>' . $pression . ' hPa</b></li>';
+						echo '<li>Vent: <b>' . $vent . ' m/s</b></li>';
+					echo '</ul>';
+				echo '</div>';
+			// try
+			} catch (\Exception $e) {
+				echo $args['before_title'] . 'Météo ' . $args['after_title'];
+			// catch
+			}
+		// if
+		} else { 
+			echo $args['before_title'] . 'Météo ' . $args['after_title'];
+		// else		
+		} 
 
 		echo $args['after_widget'];
-	}
+	// function widget
+	} 
 
 	/**
 	 * Affiche le formulaire d'options sur admin
