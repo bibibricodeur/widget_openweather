@@ -37,14 +37,13 @@ class Widget_OpenWeather extends WP_Widget {
 		//print_r( $instance );
 		if ( ! empty( $instance['idville'] ) && ! empty( $instance['cleapi'] )) {
 			$requete = ( 'https://api.openweathermap.org/data/2.5/weather?id=' . $instance['idville'] . '&appid=' . $instance['cleapi'] . '&lang=fr&units=metric' );
-			$reponse    = file_get_contents($requete);
-			try {
-				$objetsjson = json_decode($reponse);
-				//var_dump($objetsjson);
-				$patelin    = $objetsjson -> name;
+			$reponse = file_get_contents($requete);
+			$objetsjson = json_decode($reponse);
+			//var_dump($objetsjson);
+			$patelin    = $objetsjson -> name;
+			if ($patelin) {
 				//echo $patelin;
 				echo $args['before_title'] . 'Météo ' . apply_filters( 'widget_title', $patelin ) . $args['after_title'];
-			//}
 				//echo esc_html__( 'Hello, Widget_Openweather!', 'text_domain' );
 				$description= $objetsjson -> weather[0] -> description;
 				$humidite   = $objetsjson -> main -> humidity;
@@ -70,10 +69,10 @@ class Widget_OpenWeather extends WP_Widget {
 						echo '<li>Vent: <b>' . $vent . ' m/s</b></li>';
 					echo '</ul>';
 				echo '</div>';
-			// try
-			} catch (\Exception $e) {
+			// if
+			} else {
 				echo $args['before_title'] . 'Météo ' . $args['after_title'];
-			// catch
+			// else
 			}
 		// if
 		} else { 
